@@ -179,7 +179,7 @@ https://relay.edennetwork.io
 4. call `/eth/v1/beacon/states/{slot}/sync_committee`
 - retrive all the indexes for the request slot
 5. look up all the pubkey from the map with indexes from step 1
-- if not exist, lazy load singleflight update the map (by step 1 call `/eth/v1/beacon/states/{latest_slot}/validators)`
+- if not exist, lazy load singleflight update the map by step 1 call `/eth/v1/beacon/states/{latest_slot}/validators)`
 
 ## improvement
 - In general, if historical data is needed, I would make it as 2 app - exporter and api-server. Exporter computes the data concurrenily and stores the data in database. Api-server will fetch the data from database.
