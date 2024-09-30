@@ -33,7 +33,7 @@ flag
 logger is injected to middleware to log every requests frim client
 
 
-## How to build and run your application
+## How to build and run the application
 1. make a copy of `example.env` to `.env`
 ```bash
 cp example.env .env
