@@ -132,7 +132,7 @@ chomd +x test.sh
 ### GET /blockreward/{slot}
 1. check if slot is unit64
 2. check if slot is in future
-3. call all relays {relay endpoint}/relay/v1/data/bidtraces/proposer_payload_delivered?limit=1&cursor={slot}
+3. call all relays `/relay/v1/data/bidtraces/proposer_payload_delivered?limit=1&cursor={slot}`
 - check if reqested slot exists from the relays'bidtraces
 - if slot exist -> "value" from bidtraces is validator reward
 4. check if last txs in block recipient == bidtraces'proposer_fee_recipient && eth transfer == bidtraces.value
@@ -168,14 +168,14 @@ https://relay.edennetwork.io
 
 ### GET /syncduties/{slot}
 (assuming validator index won't change)
-1. app start with call {node http endpoint}/eth/v1/beacon/states/{latest_slot}/validators
+1. app start with call `/eth/v1/beacon/states/{latest_slot}/validators`
 - load all the validators for requested slot to a map[index]pubkey in memory
 2. check if slot is unit64
 3. check if slot is in future
-4. call {node http endpoint}/eth/v1/beacon/states/{slot}/sync_committee
+4. call `/eth/v1/beacon/states/{slot}/sync_committee`
 - retrive all the indexes for the request slot
 5. look up all the pubkey from the map with indexes from step 1
-- if not exist, lazy load singleflight update the map (by step 1 call {node http endpoint}/eth/v1/beacon/states/{latest_slot}/validators)
+- if not exist, lazy load singleflight update the map (by step 1 call `/eth/v1/beacon/states/{latest_slot}/validators)`
 
 ## improvement
 In general, if historical data is needed, I would make it as 2 app - exporter and api-server. Exporter computes the data concurrenily and stores the data in database. Api-server will fetch the data from database.
@@ -185,10 +185,10 @@ In general, if historical data is needed, I would make it as 2 app - exporter an
 - Relay endpoints has to be updated from time to time, when new relay is up for the network. It needs another relay endpoint scrapper to keep the data is up to date
 
 ### syncduties
-- very huge response from: {node http endpoint}/eth/v1/beacon/states/{slot}/validators
+- very huge response from: `/eth/v1/beacon/states/{slot}/validators`
 
 It would be better to have another go routine or exporter to keep the indexes and pubkey in database to look up
 
-- very slow with old slot: {node http endpoint}/eth/v1/beacon/states/{slot}/sync_committees
+- very slow with old slot: `/eth/v1/beacon/states/{slot}/sync_committees`
 
 It could only provide latest slot with fast response for current set-up. It would be better to store every historical record and computed in the back for the api server.
