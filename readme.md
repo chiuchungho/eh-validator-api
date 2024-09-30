@@ -51,6 +51,7 @@ chomd +x run.sh
 ./run.sh
 ```
 - docker
+Image is already built and pushed to my dockerhub - chiuchungho/eth-validator-api:0.2
 ```bash
 docker compose up && docker compose rm -f
 ```
@@ -118,6 +119,12 @@ Bad Request
 ```
 
 ## How to run test
+1. make a copy of `example.env` to `.env`
+```bash
+cp example.env .env
+```
+2. add your quicknode http endpoint key in .env - param `NODE_ENDPOINT`
+3. script below
 ```bash
 chomd +x test.sh
 ./test.sh
