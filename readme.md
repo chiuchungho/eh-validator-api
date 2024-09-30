@@ -32,6 +32,10 @@ flag
 
 logger is injected to middleware to log every requests frim client
 
+- httprate.LimitByIP
+- RequestID
+- RealIP
+
 
 ## How to build and run the application
 1. make a copy of `example.env` to `.env`
