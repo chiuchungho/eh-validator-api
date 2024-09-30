@@ -6,24 +6,30 @@ Develop a small RESTful API application using Go. This application will interact
 In general, this api server is built to fetch data while request from client calling in. It is set with `httprate.LimitByIP` 100 reqs/min to avoid api exploit since it is query from quicknode api. We have to pay for the credit for each client request. It can be extended later with client api key allocated requested limit with each individual client.
 
 - `blockreward` 
+
 It is fetching all the relays endpoints to find the bidtraces of block. If if reqested slot exists from the relay's bidtraces, the last transaction of the block (to address == bidtraces'proposer_fee_recipient) and eth transfer value == bidtraces.value, it deteminate it is a block produced by a MEV relay. The `blockreward` should be `bidtraces.value`
 
 When no bidtraces is found matching, it is a a vanilla block (built internally in the validator node). The `blockreward` should be `aggregating gas_used*gas_price for every transaction in that block and then deducting the burned fee`. `static reward` is ignored here since after the merge to PoS. No more miner reward. Assuming we only want the latest data. Otherwise, I could also add back the static reward to calculation.
 
 - `syncduties` 
+
 It is fetching `/eth/v1/beacon/states/{slot}/sync_committees` to get indexes of all validators which are sync committees. And then it needs to look up `/eth/v1/beacon/states/{slot}/validators` to map the indexes to the validator pubkey. By my observation, `/eth/v1/beacon/states/{slot}/validators` has around 750MB for the latest block. It is not worth it to call this endpoints for every single client request, since sync committees are chosen every 256 epochs (~27 hours). The need response of `/eth/v1/beacon/states/{slot}/validators` is store as a index-pubkey map{key: index, value: pubkey}. When the application starts, it calls `/eth/v1/beacon/states/{slot}/validators` to load up the map in memory. When api call from client to our `syncduties` api, it looks ip the map to find the pubkey. If there is an unknown indexes (new validator just joined and selected to the network), our app call `/eth/v1/beacon/states/{slot}/validators` in singleflight to update the index-pubkey map again.
 
 ### package
 - go 1.23.1
 - go-chi
+
 go-chi router is compatible with go built-in library net/http. It is light-weighted and provide various support of existing middleware
 - log/slog
+
 light-weighted logger
 - github.com/namsral/flag
+
 flag
 
 ### middleware
 - logger
+
 logger is injected to middleware to log every requests frim client
 
 
@@ -91,7 +97,7 @@ curl http://localhost:8080/eth/validator/syncduties/10074637
 ```
 {
     "data":[
-        "0xb9cc8496bba9566b11e12dceffd2b0bc235d78bd457c5f45856b772f949d7ddfa5ea0eac40eb3dd594dd03df2728ba62","0x96d18e1f7e84b2895d1fb42ae8d25c90f9eb38895af13b72b6416ea386373ba932a69a5ee7469f5221d1fd1f58e66123",
+        "0xb9cc8496bba9566b11e12dceffd2b0bc235d78bd457c5f45856b772f949d7ddfa5ea0eac40eb3dd594dd03df2728ba62",
         ...
     ]
 }
@@ -180,6 +186,9 @@ In general, if historical data is needed, I would make it as 2 app - exporter an
 
 ### syncduties
 - very huge response from: {node http endpoint}/eth/v1/beacon/states/{slot}/validators
+
 It would be better to have another go routine or exporter to keep the indexes and pubkey in database to look up
+
 - very slow with old slot: {node http endpoint}/eth/v1/beacon/states/{slot}/sync_committees
+
 It could only provide latest slot with fast response for current set-up. It would be better to store every historical record and computed in the back for the api server.
