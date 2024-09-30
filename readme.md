@@ -15,7 +15,7 @@ When no bidtraces is found matching, it is a a vanilla block (built internally i
 
 It is fetching `/eth/v1/beacon/states/{slot}/sync_committees` to get indexes of all validators which are sync committees. And then it needs to look up `/eth/v1/beacon/states/{slot}/validators` to map the indexes to the validator pubkey. By my observation, `/eth/v1/beacon/states/{slot}/validators` has around 750MB for the latest block. It is not worth it to call this endpoints for every single client request, since sync committees are chosen every 256 epochs (~27 hours). The need response of `/eth/v1/beacon/states/{slot}/validators` is store as a index-pubkey map{key: index, value: pubkey}. When the application starts, it calls `/eth/v1/beacon/states/{slot}/validators` to load up the map in memory. When api call from client to our `syncduties` api, it looks ip the map to find the pubkey. If there is an unknown indexes (new validator just joined and selected to the network), our app call `/eth/v1/beacon/states/{slot}/validators` in singleflight to update the index-pubkey map again.
 
-### package
+### Package
 - go 1.23.1
 - go-chi
 
@@ -27,7 +27,7 @@ light-weighted logger
 
 flag
 
-### middleware
+### Middleware
 - logger
 
 logger is injected to middleware to log every requests frim client
@@ -189,7 +189,7 @@ https://relay.edennetwork.io
 - if not exist, lazy load singleflight update the map by step 1 call `/eth/v1/beacon/states/{latest_slot}/validators)`
 
 ## improvement
-- In general, if historical data is needed, I would make it as 2 app - exporter and api-server. Exporter computes the data concurrenily and stores the data in database. Api-server will fetch the data from database.
+- Overall, if historical data is needed, I would make it as 2 app - exporter and api-server. Exporter computes the data concurrenily and stores the data in database. Api-server will fetch the data from database.
 
 - The error resposne can be also updated to another format. e.g. provide more detailed error respose
 
