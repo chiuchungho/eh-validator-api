@@ -1,0 +1,1 @@
+docker build -t chiuchungho/eth-validator-api:0.2 -f dockerfile . 

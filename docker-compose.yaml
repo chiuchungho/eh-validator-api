@@ -1,0 +1,13 @@
+services:
+  server:
+    image: chiuchungho/eth-validator-api:0.2
+    env_file:
+      - path: .env
+        required: true
+    command:
+      - "/bin/sh"
+      - "-c"
+      - "eth-validator-api"
+      - ""
+    ports:
+      - "8080:8080"
