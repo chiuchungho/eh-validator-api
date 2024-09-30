@@ -182,7 +182,11 @@ https://relay.edennetwork.io
 - if not exist, lazy load singleflight update the map (by step 1 call `/eth/v1/beacon/states/{latest_slot}/validators)`
 
 ## improvement
-In general, if historical data is needed, I would make it as 2 app - exporter and api-server. Exporter computes the data concurrenily and stores the data in database. Api-server will fetch the data from database.
+- In general, if historical data is needed, I would make it as 2 app - exporter and api-server. Exporter computes the data concurrenily and stores the data in database. Api-server will fetch the data from database.
+
+- The error resposne can be also updated to another format. e.g. provide more detailed error respose
+
+- Swagger api doc can be also added in the future.
 
 ### blockreward
 - It has more edge cases that needs to be covered. I need more time to investigate, if the builder has different setting with the block building
