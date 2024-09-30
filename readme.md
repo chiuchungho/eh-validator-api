@@ -72,7 +72,7 @@ curl http://localhost:8080/eth/validator/blockreward/10074111
 }
 ```
 
-curl curl http://localhost:8080/eth/validator/blockreward/10073863
+curl http://localhost:8080/eth/validator/blockreward/10073863
 ```JSON
 {
     "status":"vanilla",
