@@ -47,7 +47,7 @@ cp example.env .env
 4. We can run it in 2 way
 - script
 ```bash
-chomd +x run.sh
+chmod +x run.sh
 ./run.sh
 ```
 - docker
@@ -126,7 +126,7 @@ cp example.env .env
 2. add your quicknode http endpoint key in .env - param `NODE_ENDPOINT`
 3. script below
 ```bash
-chomd +x test.sh
+chmod +x test.sh
 ./test.sh
 ```
 
