@@ -43,7 +43,7 @@ logger is injected to middleware to log every requests frim client
 cp example.env .env
 ```
 2. add your quicknode http endpoint key in .env - param `NODE_ENDPOINT`
-3. make sure is app is running in port 8080. If so, change param `LISTEN_ADDR`. And test it with your own port.
+3. make sure no app is running in port 8080. If so, change param `LISTEN_ADDR`. And test it with your own port.
 4. We can run it in 2 way
 - script
 ```bash
